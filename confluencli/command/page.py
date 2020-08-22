@@ -1,43 +1,25 @@
-import os
-import io
 import zipstream
+from dataclasses import dataclass, field
 from confluencli.util import log, handler
 from confluencli.model import content
-from confluencli.repository import page_repository
+from confluencli.service import page_service
 
 logger = log.get_logger()
 error_type = handler.ErrorType
 
 
+@dataclass
 class Page():
-    def download(self, id, output="output.zip", recursive=True):
-        _content = content.Content(id=id)
-        page_repository.PageRepository().set_content(_content)
-        z = zipstream.ZipFile()
+    page_srv: page_service.PageService = field(
+        default_factory=page_service.PageService
+    )
 
-        self.__archive(_content, "./" + _content.id, z, recursive)
+    def download(self, id, output="output.zip", recursive=False):
+        content_ = content.Content(id=id)
+        self.page_srv.set_page(content_)
+
+        z = zipstream.ZipFile()
+        self.page_srv.archive_page(content_, "./" + content_.id, z, recursive)
         with open(output, "wb") as f:
             for data in z:
                 f.write(data)
-
-    def __archive(self, _content, current_path, zipfile, is_recursive):
-        zipfile.writestr(
-            current_path + "/" + _content.title + _content.extension,
-            _content.body.encode('utf-8')
-        )
-        for _attachment in _content.attachments:
-            zipfile.write_iter(
-                current_path + "/" + "attachments/" +
-                _attachment.id + "_" + _attachment.title,
-                page_repository.PageRepository().download_stream(_attachment)
-            )
-
-        if is_recursive:
-            if not _content.children_id:
-                current_path += "/.."
-                return
-            for child_id in _content.children_id:
-                _child = content.Content(id=child_id)
-                page_repository.PageRepository().set_content(_child)
-                self.__archive(
-                    _child, current_path + "/" + _child.id, zipfile, is_recursive)

@@ -4,7 +4,11 @@ from .model.attachment import *
 from .model.base import *
 from .model.content import *
 from .model.label import *
-from .repository.page_repository import *
+from .repository.base_repository import *
+from .repository.content_repository import *
+from .repository.label_repository import *
+from .repository.attachment_repository import *
+from .service.page_service import *
 from .command.page import *
 from .command.version import *
 from .cli import *
