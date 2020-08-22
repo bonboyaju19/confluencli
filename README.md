@@ -17,6 +17,6 @@ WIKI_URK=YOUR_CONFLUENCE_BASE_URL
 ```
 2. Run command.
 ```
-confluencli page download --id=YOUR_PAGE_ID --path=./output.zip
+confluencli page download --id=YOUR_PAGE_ID --output=./output.zip
 ```
 
