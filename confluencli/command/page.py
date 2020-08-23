@@ -16,7 +16,7 @@ class Page():
 
     def download(self, id, output="output.zip", recursive=False):
         content_ = content.Content(id=id)
-        self.page_srv.set_page(content_)
+        content_ = self.page_srv.load_page(content_.id)
 
         z = zipstream.ZipFile()
         self.page_srv.archive_page(content_, "./" + content_.id, z, recursive)

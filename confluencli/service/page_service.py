@@ -21,11 +21,14 @@ class PageService:
         default_factory=attachment_repository.AttachmentRepository
     )
 
-    def set_page(self, content_):
-        self.content_repo.set_content(content_)
-        self.content_repo.set_content_children(content_)
-        self.label_repo.set_label(content_)
-        self.attachment_repo.set_attachment(content_)
+    def load_page(self, content_id):
+        content_ = self.content_repo.get_content(content_id)
+        content_.children_id = self.content_repo.get_content_children(
+            content_.id)
+        content_.attachments = self.attachment_repo.get_attachments(
+            content_.id)
+        content_.labels = self.label_repo.get_labels(content_.id)
+        return content_
 
     def archive_page(self, content_, current_path, zipfile, is_recursive):
         zipfile.writestr(
@@ -34,7 +37,7 @@ class PageService:
         )
         for attachment_ in content_.attachments:
             zipfile.write_iter(
-                current_path + "/" + "attachments/" +
+                current_path + "/attachments/" +
                 attachment_.id + "_" + attachment_.title,
                 self.attachment_repo.download_stream(attachment_)
             )
@@ -44,9 +47,11 @@ class PageService:
                 return
             for child_id in content_.children_id:
                 child = content.Content(id=child_id)
-                self.content_repo.set_content(child)
-                self.content_repo.set_content_children(child)
-                self.attachment_repo.set_attachment(child)
+                child = self.content_repo.get_content(child.id)
+                child.children_id = self.content_repo.get_content_children(
+                    child.id)
+                child.attachments = self.attachment_repo.get_attachments(
+                    child.id)
                 self.archive_page(
                     child,
                     current_path + "/" + child.id,

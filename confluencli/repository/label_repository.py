@@ -10,9 +10,15 @@ error_type = handler.ErrorType
 
 @dataclass
 class LabelRepository(base_repository.BaseRepository):
-    def set_label(self, content):
+    def get_labels(self, content_id):
         labels_response = self.confluence_api.get(
-            path="/rest/api/content/" + content.id + "/label")
+            path="/rest/api/content/" + content_id + "/label")
+        labels_list = []
         for lr in labels_response["results"]:
-            content.labels.append(label.Label(
-                id=lr["id"], name=lr["name"], label=lr["label"], content_id=content.id))
+            labels_list.append(label.Label(
+                id=lr["id"],
+                name=lr["name"],
+                label=lr["label"],
+                content_id=content_id)
+            )
+        return labels_list
