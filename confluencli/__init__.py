@@ -8,7 +8,7 @@ from .repository.attachment_repository import *
 from .repository.base_repository import *
 from .repository.content_repository import *
 from .repository.label_repository import *
-from .service.page_service import *
+from .service.download_page_service import *
 from .util.config import *
 from .util.handler import *
 from .util.log import *

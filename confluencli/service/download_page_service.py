@@ -10,7 +10,7 @@ error_type = handler.ErrorType
 
 
 @dataclass
-class PageService:
+class DownloadPageService:
     content_repo: content_repository.ContentRepository = field(
         default_factory=content_repository.ContentRepository
     )
@@ -20,6 +20,19 @@ class PageService:
     attachment_repo: attachment_repository.AttachmentRepository = field(
         default_factory=attachment_repository.AttachmentRepository
     )
+
+    def download_page(self, content_id, output, is_recursive):
+        content_ = self.load_page(content_id)
+        z = zipstream.ZipFile()
+        self.archive_page(
+            content_,
+            "./" + content_.id,
+            z,
+            is_recursive
+        )
+        with open(output, "wb") as f:
+            for data in z:
+                f.write(data)
 
     def load_page(self, content_id):
         content_ = self.content_repo.get_content(content_id)
