@@ -9,7 +9,7 @@ error_type = handler.ErrorType
 
 @dataclass
 class AttachmentRepository(base_repository.BaseRepository):
-    def get_attachments(self, content_id):
+    def get_list(self, content_id):
         attachments_response = self.confluence_api.get(
             path="/rest/api/content/" + content_id + "/child/attachment")
         attachments_list = []

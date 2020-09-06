@@ -14,7 +14,7 @@ class Page():
     )
 
     def download(self, id, output="output.zip", recursive=False):
-        self.download_page_srv.download_page(
+        self.download_page_srv.download(
             str(id),
             output,
             recursive

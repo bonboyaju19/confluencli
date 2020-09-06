@@ -10,7 +10,7 @@ error_type = handler.ErrorType
 
 @dataclass
 class LabelRepository(base_repository.BaseRepository):
-    def get_labels(self, content_id):
+    def get_list(self, content_id):
         labels_response = self.confluence_api.get(
             path="/rest/api/content/" + content_id + "/label")
         labels_list = []

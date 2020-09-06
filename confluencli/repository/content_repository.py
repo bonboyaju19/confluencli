@@ -10,7 +10,7 @@ error_type = handler.ErrorType
 
 @dataclass
 class ContentRepository(base_repository.BaseRepository):
-    def get_content(self, content_id):
+    def get(self, content_id):
         content_response = self.confluence_api.get(
             path="/rest/api/content/" +
             content_id, params={"expand": "ancestors,body.storage"}
@@ -22,7 +22,7 @@ class ContentRepository(base_repository.BaseRepository):
             parent_id=content_response["ancestors"][0]["id"]
         )
 
-    def get_content_children(self, content_id):
+    def get_children(self, content_id):
         children_response = self.confluence_api.get(
             path="/rest/api/content/" + content_id + "/child/page")
         children_list = []
