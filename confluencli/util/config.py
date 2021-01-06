@@ -6,6 +6,11 @@ error_type = handler.ErrorType
 env_type = handler.EnvType
 
 
+def get_env_value_from(key):
+    os.getenv(key)
+    pass
+
+
 def set_credential(base):
     if env_type.WIKI_USERNAME_ENV.value not in os.environ:
         handler.handle_error(error_type.CONFLUENCLI_USERNAME_NOT_EXIST)

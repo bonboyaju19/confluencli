@@ -13,7 +13,7 @@ class Content:
     id: str = ""
     title: str = ""
     body: str = ""
-    extension: str = ".html"
+    extension: str = ".json"
     parent_id: str = ""
     children_id: List[str] = field(default_factory=list)
     attachments: List[attachment.Attachment] = field(default_factory=list)

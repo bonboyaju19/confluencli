@@ -1,4 +1,5 @@
 import zipstream
+import json
 from dataclasses import dataclass, field
 from confluencli.util import log, handler
 from confluencli.model import content
@@ -45,8 +46,9 @@ class DownloadPageService:
 
     def archive(self, content_, current_path, zipfile, is_recursive):
         zipfile.writestr(
-            current_path + "/" + content_.title + content_.extension,
-            content_.body.encode('utf-8')
+            current_path + "/" + "page.json",
+            # content_.body.encode('utf-8')
+            self.__format_json(content_).encode('utf-8')
         )
         for attachment_ in content_.attachments:
             zipfile.write_iter(
@@ -74,3 +76,22 @@ class DownloadPageService:
                     zipfile,
                     is_recursive
                 )
+
+    def __format_json(self, content_):
+        # label_name_list = [l.name for l in content_.labels]
+        page_dict = {
+            "page": {
+                "id": content_.id,
+                "title": content_.title,
+                "body": content_.body,
+                "children": content_.children_id,
+                "labels": [l.name for l in content_.labels],
+                "attachments": []
+            }
+        }
+
+        for attachment_ in content_.attachments:
+            page_dict["page"]["attachments"].append({
+                "title": attachment_.title
+            })
+        return json.dumps(page_dict)

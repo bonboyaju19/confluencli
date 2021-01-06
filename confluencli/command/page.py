@@ -19,3 +19,6 @@ class Page():
             output,
             recursive
         )
+
+    def upload(self, id, input="output.zip"):
+        pass

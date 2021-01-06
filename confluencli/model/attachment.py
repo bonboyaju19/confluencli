@@ -17,5 +17,3 @@ class Attachment:
     extension: str = ""
     webui_url: str = ""
     download_url: str = ""
-    data: bytes = field(default_factory=bytes)
-    file_path: str = ""
